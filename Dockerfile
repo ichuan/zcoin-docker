@@ -1,4 +1,5 @@
 FROM ubuntu:18.04
+SHELL ["/bin/bash", "-c"]
 
 RUN mkdir -p /opt/coin
 WORKDIR /opt/coin
@@ -6,12 +7,10 @@ WORKDIR /opt/coin
 EXPOSE 8888
 
 RUN apt-get update && apt-get install -y wget python
-RUN wget https://github.com/zcoinofficial/zcoin/releases/download/v0.13.8.10/zcoin-0.13.8.10-linux64.tar.gz -O - | tar --strip-components 1 -C /opt/coin -xzf -
+RUN wget https://github.com/firoorg/firo/releases/download/v0.14.1.2/firo-0.14.1.2-linux64.tar.gz -O - | tar --strip-components 1 -C /opt/coin -xzf -
 
 # cleanup
-RUN rm -rf /var/lib/apt/lists/*
+RUN rm -rf /var/lib/apt/lists/* bin/{firo-qt,firo-tx,tor*}
 
-VOLUME ["/opt/coin/data", "/opt/coin/coin.conf"]
-
-ENTRYPOINT ["/opt/coin/bin/zcoind"]
+ENTRYPOINT ["/opt/coin/bin/firod"]
 CMD ["-conf=/opt/coin/coin.conf"]
